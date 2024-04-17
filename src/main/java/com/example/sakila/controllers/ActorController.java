@@ -5,6 +5,9 @@ import com.example.sakila.dto.output.ActorOutput;
 import com.example.sakila.entities.Actor;
 import com.example.sakila.repositories.ActorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +33,22 @@ public class ActorController {
                 .collect(Collectors.toList());
 
     }
+
+    @GetMapping("/page")
+    public Page<ActorOutput> readAllPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortField,
+            @RequestParam(defaultValue = "asc") String sortOrder
+
+    ) {
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(direction, sortField));
+        return actorRepository.findAll(pageRequest)
+                .map(ActorOutput::from);
+    }
+
+
 
     @GetMapping("/{id}")
     public ActorOutput readById(@PathVariable Short id) {

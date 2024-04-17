@@ -1,12 +1,16 @@
 package com.example.sakila.controllers;
 
 import com.example.sakila.dto.input.FilmInput;
+import com.example.sakila.dto.output.ActorOutput;
 import com.example.sakila.dto.output.FilmOutput;
 import com.example.sakila.entities.Film;
 import com.example.sakila.entities.Language;
 import com.example.sakila.repositories.FilmRepository;
 import com.example.sakila.repositories.LanguageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -41,6 +45,19 @@ public class FilmController {
                         HttpStatus.NOT_FOUND,
                         String.format("No such film with id %d.", id)
                 ));
+    }
+
+    @GetMapping("/page")
+    public Page<FilmOutput> readAllPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortField,
+            @RequestParam(defaultValue = "asc") String sortOrder
+    ) {
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        PageRequest pageRequest = PageRequest.of(page,size, Sort.by(direction, sortField));
+        return filmRepository.findAll(pageRequest)
+                .map(FilmOutput::from);
     }
 
 
