@@ -1,5 +1,6 @@
 package com.example.sakila.dto.output;
 
+import com.example.sakila.Rating;
 import com.example.sakila.entities.Film;
 import com.example.sakila.entities.Language;
 import lombok.AllArgsConstructor;
@@ -11,13 +12,6 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public class FilmOutput {
-//    public enum Ratings {
-//        G("G"),
-//        PG("PG"),
-//        PG13("PG-13"),
-//        R("R"),
-//        NC17("NC-17"),
-//    }
 
     private Short id;
     private String title;
@@ -36,6 +30,7 @@ public class FilmOutput {
                 film.getReleaseYear(),
                 film.getCast()
                         .stream()
+                        .limit(5)
                         .map(ActorReferenceOutput::from)
                         .collect(Collectors.toList())
                 );

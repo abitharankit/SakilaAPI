@@ -1,5 +1,6 @@
 package com.example.sakila.controllers;
 
+import com.example.sakila.Rating;
 import com.example.sakila.dto.input.FilmInput;
 import com.example.sakila.dto.output.ActorOutput;
 import com.example.sakila.dto.output.FilmOutput;

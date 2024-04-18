@@ -21,7 +21,10 @@ public class ActorOutput {
         return new ActorOutput(actor.getId(),
                 actor.getFirstName(),
                 actor.getLastName(),
-                actor.getFilms().stream().map(FilmReferenceOutput::from).collect(Collectors.toList())
+                actor.getFilms()
+                        .stream()
+                        .map(FilmReferenceOutput::from)
+                        .collect(Collectors.toList())
             );
     }
 
